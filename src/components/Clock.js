@@ -1,16 +1,13 @@
-import moment from "moment";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { v4 } from "uuid";
+import { getTime } from "../utils";
 
 const Clock = ({ handleDelete, id, name, timezone }) => {
-  const getTime = (utc) => moment.utc().utcOffset(utc).format("hh:mm:ss");
-  console.log("getTime", moment.utc().utcOffset(5).format("hh:mm:ss"))
-  let time = getTime(+timezone);
-  const timeRef = useRef();
+  const [time, setTime] = useState(getTime(+timezone));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      timeRef.current.innerHTML = getTime(+timezone);
+      setTime(getTime(+timezone));
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -23,7 +20,7 @@ const Clock = ({ handleDelete, id, name, timezone }) => {
       </span>
       <span className="name">{name}</span>
       <div className="clock">
-        <span className="time" ref={timeRef} >{time}</span>
+        <span className="time">{time}</span>
       </div>
     </div>
   );
